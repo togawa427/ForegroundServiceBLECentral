@@ -1,0 +1,2 @@
+# ForegroundServiceBLECentral
+BLEのスキャンをフォアグラウンドサービスでする
