@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
     private val handler = Handler()
 
     private val REQUEST_ENABLE_BT = 1
-    private val SCAN_PERIOD: Long = 10000
+    private val SCAN_PERIOD: Long = 30000
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,7 +86,7 @@ class MainActivity : ComponentActivity() {
                             scanLeDevice()
                             Log.d("Activity", "ボタンの処理終了")
                         }) {
-                            Text(text = "セントラル開始")
+                            Text(text = "スキャン開始停止")
                         }
 
                         Button(onClick = {
@@ -138,10 +138,13 @@ class MainActivity : ComponentActivity() {
             //nameをログで出力する。nullだった場合No Name
             //Log.d("scanResult", result.device.toString() ?: "No Name")
             val uuids = result.scanRecord?.serviceUuids
+            val receiveRssi = result.rssi
             if(uuids != null){
                 for(uuid in uuids) {
                     val uuidString = uuid.uuid.toString()
+                    val rssi =
                     Log.d("scanResult", "$uuidString")
+                    Log.d("scanResult", "$receiveRssi")
                 }
             }
         }
