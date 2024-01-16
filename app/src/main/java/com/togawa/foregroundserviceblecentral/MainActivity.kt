@@ -132,7 +132,7 @@ class MainActivity : ComponentActivity() {
 
     private val leScanCallback: ScanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
-            Log.d("MainActivity", "コールバック")
+            //Log.d("MainActivity", "コールバック")
             super.onScanResult(callbackType, result)
 
             //nameをログで出力する。nullだった場合No Name
