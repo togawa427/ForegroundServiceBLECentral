@@ -82,7 +82,7 @@ class MainActivity : ComponentActivity() {
                         Greeting("Android")
 
                         Button(onClick = {
-                            Log.d("Activity", "サービス開始ボタン押された")
+                            Log.d("Activity", "スキャン開始ボタン押された")
                             scanLeDevice()
                             Log.d("Activity", "ボタンの処理終了")
                         }) {

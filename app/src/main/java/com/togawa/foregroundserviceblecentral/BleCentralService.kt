@@ -50,14 +50,6 @@ class BleCentralService: Service() {
 
         super.onCreate()
 
-        // WakeLockを取得
-//        val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
-//        wakeLock = powerManager.newWakeLock(
-//            PowerManager.PARTIAL_WAKE_LOCK,
-//            "MyApp:MyWakeLockTag"
-//        )
-//        wakeLock.acquire()
-
         notificationManager = NotificationManagerCompat.from(this)
         val channel = NotificationChannelCompat.Builder(
             CHANNEL_ID,
@@ -81,13 +73,13 @@ class BleCentralService: Service() {
             .setOngoing(true)
             .build()
 
+//        val mUuid = UUID.fromString("8ebc2114-4abd-ba0d-b7c6-ff0a00200049") // Galaxy S10
+        val mUuid = UUID.fromString("8ebc2114-4abd-ba0d-b7c6-ff0a00200037") // togawaスマホビーコン
+
         // スキャンのセッティング
         val scanSettings = ScanSettings.Builder()
-            .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
+            .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)  // foreground serviceでやろうとするとこのスキャンモードが強制。
             .build()
-
-        val mUuid = UUID.fromString("8ebc2114-4abd-ba0d-b7c6-ff0a00200037") // ここにサービスのUUIDを設定
-
         val scanFilters = mutableListOf<ScanFilter>()
         val filter = ScanFilter.Builder()
             .setServiceUuid(ParcelUuid(mUuid))
@@ -95,51 +87,6 @@ class BleCentralService: Service() {
         scanFilters.add(filter)
 
         bluetoothLeScanner?.startScan(scanFilters, scanSettings, leScanCallback)
-
-
-
-//        // スキャンする
-//        val timer = Timer()
-//        // val delayMillis: Long = 1 * 60 * 1000 // 実行間隔(1分をミリ秒に変換)
-//        val delayMillis: Long = 10 * 1000
-//        val timerTask = object : TimerTask() {
-//            override fun run() {
-//                // ここにscanLeDevice()メソッドの呼び出しを追加
-//                //Log.d("Service", "1分ごとの処理")
-//                Log.d("Service", "10秒ごとの処理")
-//                scanLeDevice()
-//            }
-//        }
-//        timer.schedule(timerTask, 0, delayMillis)
-
-//        // スキャンする（ライブラリ使用）
-////        BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
-////        ScanSettings settings = new ScanSettings.Builder()
-////            .setLegacy(false)
-////            .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
-////            .setReportDelay(5000)
-////            .setUseHardwareBatchingIfSupported(true)
-////            .build();
-////        List<ScanFilter> filters = new ArrayList<>();
-////        filters.add(new ScanFilter.Builder().setServiceUuid(mUuid).build());
-////        scanner.startScan(filters, settings, scanCallback);
-//
-//        val scanner = BluetoothLeScannerCompat.getScanner()
-//        val settings = ScanSettings.Builder()
-//            .setLegacy(false)
-//            .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
-//            .setReportDelay(5000)
-//            .setUseHardwareBatchingIfSupported(true)
-//            .build()
-//
-//        val mUuid = UUID.fromString("8ebc2114-4abd-ba0d-b7c6-ff0a00200037") // ここにサービスのUUIDを設定
-//        val filters = mutableListOf<no.nordicsemi.android.support.v18.scanner.ScanFilter>()
-////        val scanFilter = no.nordicsemi.android.support.v18.scanner.ScanFilter.Builder()
-////            .setServiceUuid(ParcelUuid(mUuid))
-////            .build()
-////        filters.add(scanFilter)
-//
-//        scanner.startScan(filters, settings, scanCallback)
 
 
         //5. 通知の表示
@@ -154,28 +101,9 @@ class BleCentralService: Service() {
         super.onDestroy()
     }
 
-//    private fun scanLeDevice() {
-//        bluetoothLeScanner?.let { scanner ->
-//            if (!scanning) { // Stops scanning after a pre-defined scan period.
-//                handler.postDelayed({
-//                    scanning = false
-//                    scanner.stopScan(leScanCallback)
-//                    println("stopScan")
-//                }, SCAN_PERIOD)
-//                scanning = true
-//                scanner.startScan(leScanCallback)
-//                println("startScan")
-//            } else {
-//                scanning = false
-//                scanner.stopScan(leScanCallback)
-//                println("stopScans")
-//            }
-//        }
-//    }
-
     private val leScanCallback: ScanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
-            //Log.d("Service", "コールバック")
+            Log.d("Service", "コールバック")
             //nameをログで出力する。nullだった場合No Name
             //Log.d("scanResult", result.device.toString() ?: "No Name")
             val uuids = result.scanRecord?.serviceUuids
@@ -187,16 +115,4 @@ class BleCentralService: Service() {
             }
         }
     }
-
-//        override fun onScanResult(callbackType: Int, result: ScanResult) {
-//            val uuids = result.scanRecord?.serviceUuids
-//            if (uuids != null) {
-//                for (uuid in uuids) {
-//                    val uuidString = uuid.uuid.toString()
-//                    // BluetoothデバイスのUUIDをログに出力
-//                    // また、必要に応じてRSSIなども取得可能
-//                    Log.d("ServiceScanUuid", "$uuidString, RSSI: ${result.rssi}")
-//                }
-//            }
-//        }
 }
