@@ -1,5 +1,6 @@
 package com.togawa.foregroundserviceblecentral
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.app.Service
 import android.bluetooth.BluetoothAdapter
@@ -45,6 +46,7 @@ class BleCentralService: Service() {
 
     private val SCAN_PERIOD: Long = 5000    // スキャン時間
 
+    @SuppressLint("MissingPermission")
     override fun onCreate() {
         Log.d("Service", "サービス開始するよ")
 
